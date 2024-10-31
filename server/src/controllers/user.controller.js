@@ -13,6 +13,19 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+const getUserProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password -token");
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
-  getUsers
+  getUsers,
+  getUserProfile
 };

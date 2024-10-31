@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.get("/", isAuthorized, authorizeRoles("ADMIN"), userController.getUsers);
 
+router.get("/profile", isAuthorized, userController.getUserProfile);
+
 export default router;
