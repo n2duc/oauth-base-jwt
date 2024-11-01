@@ -5,6 +5,7 @@ import userRoute from "./user.route.js";
 const router = express.Router();
 
 router.use("/auth", authRoute);
+
 router.use("/user", userRoute);
 
 router.get("/test", (req, res) => {

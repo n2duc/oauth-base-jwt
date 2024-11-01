@@ -10,15 +10,18 @@ import ErrorHandler from "./middlewares/error-handler.js";
 const app = express();
 
 const START_SERVER = () => {
-  app.use(express.json());
+  app.use((req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+  });
   app.use(cookieParser());
-  app.use(express.urlencoded({ extended: false }));
   app.use(
     cors({
       origin: process.env.CLIENT_URL,
       credentials: true
     })
   );
+  app.use(express.json());
 
   app.use("/api/v1", routes);
 

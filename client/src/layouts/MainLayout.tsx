@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/hooks/reduxHook";
-import { logout } from "@/stores/auth/auth.slice";
+import { logout } from "@/stores/auth/auth.action";
 import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
