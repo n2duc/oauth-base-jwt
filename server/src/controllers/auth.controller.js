@@ -39,11 +39,12 @@ const login = async (req, res, next) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      role: user.role
+      role: user.role,
+      avatar: user?.avatar
     };
 
     // Generate access token and refresh token
-    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, "1m");
+    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, "10m");
     const refresh_token = generateToken(userData, process.env.REFRESH_TOKEN_SECRET, "7d");
     console.log(refresh_token);
 

@@ -23,6 +23,7 @@ const START_SERVER = () => {
   );
   app.use(express.json());
 
+  app.use("/public/images", express.static("public/images"));
   app.use("/api/v1", routes);
 
   app.get("/", (req, res) => {
