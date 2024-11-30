@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ROLE } from "../../types/roles";
 import { login, logout, register } from "./auth.action";
+import { ROLE } from "@/type/roles";
 
 interface User {
   _id: string;
   email: string;
   username: string;
-  role: ROLE
+  avatar: string;
+  role: ROLE;
 }
 
 interface AuthError {
@@ -41,10 +42,15 @@ export const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<{ data: User; access_token: string }>) => {
       state.userInfo = action.payload.data;
       state.accessToken = action.payload.access_token;
-      // state.isAuthenticated = true;
+      state.isAuthenticated = true;
     },
     resetStatus: (state) => {
       state.status = "idle";
+    },
+    setAvatar: (state, action: PayloadAction<string>) => {
+      if (state.userInfo) {
+        state.userInfo.avatar = action.payload;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -89,6 +95,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const { setCredentials, resetStatus } = authSlice.actions;
+export const { setCredentials, resetStatus, setAvatar } = authSlice.actions;
 
 export default authSlice.reducer;

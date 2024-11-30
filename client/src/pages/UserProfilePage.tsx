@@ -1,7 +1,12 @@
+import SelectPhoto from "@/components/SelectPhoto";
+import UploadAvatar from "@/components/UploadAvatar";
+import { useAppSelector } from "@/hooks/reduxHook";
 import { useGetProfileQuery } from "@/services/rootApi";
 
 const UserProfilePage = () => {
-  const { data, isLoading, error, isSuccess } = useGetProfileQuery({});
+  const { data, isLoading, error, isSuccess } = useGetProfileQuery();
+  const { isShow } = useAppSelector((state) => state.dialog);
+  const { userInfo } = useAppSelector((state) => state.auth);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -18,7 +23,9 @@ const UserProfilePage = () => {
   return (
     <div>
       <h2>UserProfilePage</h2>
+      <UploadAvatar avatar={userInfo?.avatar || ''} />
       {isSuccess && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      {isShow && <SelectPhoto />}
     </div>
   )
 }

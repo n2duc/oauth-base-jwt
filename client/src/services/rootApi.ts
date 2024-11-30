@@ -9,6 +9,7 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
+import { User } from "@/type/data-models";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 
@@ -29,6 +30,11 @@ const baseQuery = fetchBaseQuery({
 
 interface RefreshResponse {
   access_token: string;
+}
+
+interface Profile {
+  success: boolean;
+  data: User;
 }
 
 const baseQueryWithReauth: BaseQueryFn<
@@ -78,13 +84,23 @@ export const rootApi = createApi({
   baseQuery: baseQueryWithReauth,
   // endpoints: builder => ({}), // Add this here if you don't have any endpoints yet
   endpoints: (builder) => ({
-    getProfile: builder.query({
+    getProfile: builder.query<Profile, void>({
       query: () => ({
         url: "/user/profile",
         method: "GET",
       }),
     }),
+    updateAvatar: builder.mutation<{ success: boolean; data: User }, FormData>({
+      query: (formData) => ({
+        url: "/user/avatar",
+        method: "PUT",
+        body: formData,
+        headers: {
+          "Content-Type": undefined,
+        }
+      }),
+    })
   }),
 });
 
-export const { useGetProfileQuery } = rootApi;
+export const { useGetProfileQuery, useUpdateAvatarMutation } = rootApi;

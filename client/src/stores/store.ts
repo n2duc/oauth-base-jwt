@@ -11,15 +11,17 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import authReducer from "./auth/auth.slice";
+import dialogReducer from "./dialog/dialog.slice";
 import { rootApi } from "@/services/rootApi";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  dialog: dialogReducer,
   [rootApi.reducerPath]: rootApi.reducer,
 });
 
 const persistConfig = {
-  key: "auth",
+  key: "root",
   storage,
   whitelist: ["auth"],
 };
