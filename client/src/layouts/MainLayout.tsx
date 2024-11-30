@@ -1,17 +1,10 @@
-import { useAppDispatch } from "@/hooks/reduxHook";
-import { logout } from "@/stores/auth/auth.action";
 import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
-  const dispatch = useAppDispatch();
-  const handleLogout = () => {
-    dispatch(logout());
-  };
   return (
-    <div>
+    <div className="w-full mx-auto max-w-5xl">
       <h1>Main Layout</h1>
       <Outlet />
-      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };

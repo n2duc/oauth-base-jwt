@@ -19,20 +19,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
   text-decoration: inherit;
+  @apply bg-zinc-600 px-4 py-2 rounded-md inline-block text-sky-400;
 }
 a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  place-content: center;
-  min-width: 100vw;
-  min-height: 100vh;
+  @apply text-sky-300;
 }
 
 h1 {
@@ -64,6 +55,18 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+input {
+  border-radius: 8px;
+  border: 1px solid #1a1a1a;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  color: #fff;
+  transition: border-color 0.25s;
 }
 
 @media (prefers-color-scheme: light) {

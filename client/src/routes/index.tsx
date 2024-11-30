@@ -5,16 +5,17 @@ import Root from "../layouts/Root";
 const AuthLayout = lazy(() => import("../layouts/AuthLayout"));
 const MainLayout = lazy(() => import("../layouts/MainLayout"));
 
-const SignInPage = lazy(() => import("../pages/SignInPage"));
-const SignUpPage = lazy(() => import("../pages/SignUpPage"));
-const DashboardPage = lazy(() => import("../pages/DashboardPage"));
-const HomePage = lazy(() => import("../pages/HomePage"));
-const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
-const UserProfilePage = lazy(() => import("../pages/UserProfilePage"));
+const SignInPage = lazy(() => import("@/pages/SignInPage"));
+const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
+const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
+const HomePage = lazy(() => import("@/pages/HomePage"));
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+const UserProfilePage = lazy(() => import("@/pages/UserProfilePage"));
+const CardPage = lazy(() => import("@/pages/CardPage"));
 
 import PrivateRoute from "./PrivateRoute";
-import { ROLE } from "../types/roles";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { ROLE } from "@/type/roles";
 
 export default function AppRouter() {
   const router = createBrowserRouter([
@@ -57,6 +58,10 @@ export default function AppRouter() {
                 {
                   index: true,
                   element: <HomePage />
+                },
+                {
+                  path: "card",
+                  element: <CardPage />
                 },
                 {
                   path: "profile",

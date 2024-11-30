@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import { ROLE } from "../types/roles"
-import { useAppSelector } from "../hooks/reduxHook"
-import { RootState } from "../stores/store"
+import { ROLE } from "@/type/roles"
+import { RootState } from "@/stores/store"
+import { useAppSelector } from "@/hooks/reduxHook"
 
 type PrivateRouteProps = {
   allowRoles: Array<ROLE>

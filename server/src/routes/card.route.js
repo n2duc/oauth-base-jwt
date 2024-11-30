@@ -1,6 +1,6 @@
 import express from "express";
 import cardController from "../controllers/card.controller.js";
-import { upload } from "../utils/multer.js";
+import { upload } from "../middlewares/multer.js";
 import { isAuthorized } from "../middlewares/verification.js";
 
 const router = express.Router();

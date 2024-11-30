@@ -3,6 +3,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import { connectMongoDB } from "./utils/db.js";
 import routes from "./routes/index.route.js";
 import ErrorHandler from "./middlewares/error-handler.js";
@@ -14,13 +15,21 @@ const START_SERVER = () => {
     res.set("Cache-Control", "no-store");
     next();
   });
-  app.use(cookieParser());
   app.use(
     cors({
-      origin: process.env.CLIENT_URL,
+      origin: function (origin, callback) {
+        const allowedOrigins = [process.env.CLIENT_URL];
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+      },
       credentials: true
     })
   );
+  app.use(bodyParser.json());
+  app.use(cookieParser());
   app.use(express.json());
 
   app.use("/public/images", express.static("public/images"));
