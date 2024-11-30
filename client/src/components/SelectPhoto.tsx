@@ -1,8 +1,9 @@
 import { useAppDispatch } from "@/hooks/reduxHook";
+import useOutsideClick from "@/hooks/useOutsideClick";
 import { useUpdateAvatarMutation } from "@/services/rootApi";
 import { setAvatar } from "@/stores/auth/auth.slice";
 import { closeDialog } from "@/stores/dialog/dialog.slice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SelectPhoto = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -10,8 +11,8 @@ const SelectPhoto = () => {
 
   const dispatch = useAppDispatch();
   const [updateAvatar, { data, isSuccess, isLoading }] = useUpdateAvatarMutation();
-
-  console.log({ isLoading, isSuccess, data });
+  
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   // Handle file selection (image)
   const handSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,8 @@ const SelectPhoto = () => {
   };
 
   const handleClose = () => dispatch(closeDialog());
+  // Close the dialog when clicking outside
+  useOutsideClick(dialogRef, handleClose);
 
   useEffect(() => {
     if (isSuccess && data?.data.avatar) {
@@ -42,13 +45,10 @@ const SelectPhoto = () => {
   }, [isSuccess, data, dispatch]);
 
   return (
-    <div
-      className="absolute w-full h-screen top-0 right-0 left-0 flex items-center justify-center bg-black bg-opacity-30"
-      onClick={handleClose}
-    >
+    <div className="absolute w-full h-screen top-0 right-0 left-0 flex items-center justify-center bg-black bg-opacity-30">
       <div
         className="bg-zinc-600 w-full max-w-sm px-6 py-4 rounded-md"
-        onClick={(e) => e.stopPropagation()}
+        ref={dialogRef}
       >
         <h3 className="text-center mb-3 text-lg font-medium">SelectPhoto</h3>
         <div className="w-full min-h-60 h-full bg-zinc-700 border border-zinc-500 rounded">
