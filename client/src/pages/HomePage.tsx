@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import { useAppSelector } from "@/hooks/reduxHook";
 
 const TextBox = () => {
@@ -11,15 +12,21 @@ const TextBox = () => {
 const HomePage = () => {
   const { userInfo } = useAppSelector((state) => state.auth);
   return (
-    <div>
-      <h2>HomePage</h2>
-      <p>Welcome, {userInfo?.username}</p>
-      <TextBox />
-      <TextBox />
-      <TextBox />
-      <TextBox />
-      <TextBox />
-    </div>
+    <>
+      <Seo
+        title="Home Page"
+        description="Description for Home Page"
+      />
+      <div>
+        <h2>HomePage</h2>
+        <p>Welcome, {userInfo?.username}</p>
+        <TextBox />
+        <TextBox />
+        <TextBox />
+        <TextBox />
+        <TextBox />
+      </div>
+    </>
   )
 }
 

@@ -18,7 +18,7 @@ const START_SERVER = () => {
   app.use(
     cors({
       origin: function (origin, callback) {
-        const allowedOrigins = [process.env.CLIENT_URL];
+        const allowedOrigins = [process.env.CLIENT_URL, "https://w84phbvj-5173.asse.devtunnels.ms"];
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {

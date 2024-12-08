@@ -46,6 +46,7 @@ const Navbar = () => {
           ))}
         </nav>
         <div className="flex items-center gap-5">
+          <img src={userInfo?.avatar} alt="avatar" className="size-8 rounded-full object-cover" />
           <p className="text-sky-400">Welcome, {userInfo?.username}</p>
           <LogoutButton />
         </div>

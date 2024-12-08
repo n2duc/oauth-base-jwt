@@ -56,23 +56,30 @@ export const register = createAsyncThunk(
         username,
       });
       return response.data;
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue({ errorMessage: error.message });
+    } catch (err) {
+      const error: AxiosError<ValidationErrors> =
+        err as AxiosError<ValidationErrors>;
+      if (!error.response) {
+        throw err;
       }
-      return rejectWithValue({ errorMessage: "Register failed" });
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async (_, { rejectWithValue }) => {
-  try {
-    await axiosPublic.get("/auth/logout");
-    return;
-  } catch (error) {
-    if (error instanceof Error) {
-      return rejectWithValue({ errorMessage: error.message });
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      await axiosPublic.get("/auth/logout");
+      return;
+    } catch (err) {
+      const error: AxiosError<ValidationErrors> =
+        err as AxiosError<ValidationErrors>;
+      if (!error.response) {
+        throw err;
+      }
+      return rejectWithValue(error.response.data);
     }
-    return rejectWithValue({ errorMessage: "Register failed" });
   }
-});
+);

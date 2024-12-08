@@ -4,6 +4,7 @@ import { useUpdateAvatarMutation } from "@/services/rootApi";
 import { setAvatar } from "@/stores/auth/auth.slice";
 import { closeDialog } from "@/stores/dialog/dialog.slice";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 const SelectPhoto = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -41,6 +42,7 @@ const SelectPhoto = () => {
     if (isSuccess && data?.data.avatar) {
       dispatch(setAvatar(data?.data.avatar || ''));
       dispatch(closeDialog());
+      toast.success("Upload avatar successfully!")
     }
   }, [isSuccess, data, dispatch]);
 

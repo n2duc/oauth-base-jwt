@@ -4,6 +4,9 @@ import { generateToken, verifyToken } from "../utils/jwt.js";
 import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcryptjs";
 
+const ACCESS_TOKEN_EXPIRE = "10m";
+const REFRESH_TOKEN_EXPIRE = "7d";
+
 const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -44,9 +47,8 @@ const login = async (req, res, next) => {
     };
 
     // Generate access token and refresh token
-    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, "10m");
-    const refresh_token = generateToken(userData, process.env.REFRESH_TOKEN_SECRET, "7d");
-    console.log(refresh_token);
+    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRE);
+    const refresh_token = generateToken(userData, process.env.REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRE);
 
     await User.findByIdAndUpdate(user._id, { token: refresh_token });
 
@@ -116,7 +118,7 @@ const refreshToken = async (req, res, next) => {
       role: decoded.role
     };
 
-    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, "15m");
+    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, REFRESH_TOKEN_EXPIRE);
 
     return res.status(StatusCodes.OK).json({ access_token });
   } catch (error) {

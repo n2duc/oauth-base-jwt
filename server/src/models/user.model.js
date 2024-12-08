@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "http://localhost:8080/public/images/1732794580077-capcapcap.jpg"
+      default: "http://localhost:8080/public/images/1733220137693-bongoaigiao2.jpg"
     },
     password: {
       type: String,

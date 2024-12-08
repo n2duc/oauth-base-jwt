@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { login, logout, register } from "./auth.action";
-import { ROLE } from "@/type/roles";
-
-interface User {
-  _id: string;
-  email: string;
-  username: string;
-  avatar: string;
-  role: ROLE;
-}
+import { User } from "@/type/data-models";
 
 interface AuthError {
   success: boolean;

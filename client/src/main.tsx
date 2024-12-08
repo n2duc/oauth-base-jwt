@@ -6,15 +6,20 @@ import "./index.css";
 import { Provider } from "react-redux";
 import { persistor, store } from "./stores/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
+import { HelmetProvider } from "react-helmet-async";
+import { Toaster } from "react-hot-toast";
+
+const helmetContext = {};
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        {/* <BrowserRouter> */}
+      <HelmetProvider context={helmetContext}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Toaster position="top-center" reverseOrder={false} />
           <AppRouter />
-        {/* </BrowserRouter> */}
-      </PersistGate>
+        </PersistGate>
+      </HelmetProvider>
     </Provider>
   </StrictMode>
 );

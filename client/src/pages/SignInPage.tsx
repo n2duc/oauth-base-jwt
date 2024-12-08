@@ -4,7 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/stores/auth/auth.action";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import FieldInput from "@/components/FieldInput";
+import toast from "react-hot-toast";
 
 const SignInPage = () => {
   const { loading, isAuthenticated, error } = useAppSelector((state) => state.auth);
@@ -30,16 +32,20 @@ const SignInPage = () => {
     dispatch(login(data));
   };
 
+  if (error) {
+    toast.error(error.message);
+  }
+
   return (
-    <div>
-      <h2>SignInPage</h2>
-      <form onSubmit={handleSubmit(handleLogin)}>
-        <div>
+    <div className="bg-zinc-700 py-5 px-8 rounded-md max-w-lg w-full">
+      <h2 className="text-center mb-4">SignInPage</h2>
+      <form onSubmit={handleSubmit(handleLogin)} className="space-y-3 w-full">
+        <FieldInput>
           <label htmlFor="username">Username</label>
           <input type="text" placeholder="Username" {...register("username")} />
           {errors.username && <p>{errors.username.message}</p>}
-        </div>
-        <div>
+        </FieldInput>
+        <FieldInput>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -47,11 +53,11 @@ const SignInPage = () => {
             {...register("password")}
           />
           {errors.password && <p>{errors.password.message}</p>}
-        </div>
+        </FieldInput>
         <button type="submit" disabled={loading}>
           {loading ? "Loading..." : "Sign In"}
         </button>
-        {error && <p>{error.message}</p>}
+        <Link to="/signup">Sign Up</Link>
       </form>
     </div>
   );

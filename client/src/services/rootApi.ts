@@ -10,6 +10,8 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { User } from "@/type/data-models";
+import { logout } from "@/stores/auth/auth.action";
+import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "";
 
@@ -32,10 +34,13 @@ interface RefreshResponse {
   access_token: string;
 }
 
-interface Profile {
+interface IResponse<T> {
   success: boolean;
-  data: User;
+  data: T
 }
+
+type Profile = IResponse<User>;
+type DashboardUser = IResponse<User[]>;
 
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
@@ -65,7 +70,13 @@ const baseQueryWithReauth: BaseQueryFn<
           }
           // retry the initial query
           result = await baseQuery(args, api, extraOptions);
+        } else {
+          api.dispatch(logout());
         }
+      } catch (error) {
+        // Handle errors during the refresh process
+        toast.error(`Error during token refresh: ${error}`);
+        api.dispatch(logout());
       } finally {
         release();
       }
@@ -99,8 +110,14 @@ export const rootApi = createApi({
           "Content-Type": undefined,
         }
       }),
+    }),
+    getAllUsers: builder.query<DashboardUser, void>({
+      query: () => ({
+        url: "/user",
+        method: "GET"
+      })
     })
   }),
 });
 
-export const { useGetProfileQuery, useUpdateAvatarMutation } = rootApi;
+export const { useGetProfileQuery, useUpdateAvatarMutation, useGetAllUsersQuery } = rootApi;
