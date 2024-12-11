@@ -1,0 +1,22 @@
+{
+  "name": "authentication-master",
+  "version": "0.1.1",
+  "description": "Authentication Master",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && bun install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && bun dev",
+    "start": "cd server && npm start"
+  },
+  "keywords": ["n2duc"],
+  "author": "@n2duc",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n2duc/oauth-base-jwt"
+  }
+}
