@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    google_auth: {
+      type: Boolean,
+      default: false
+    },
     role: {
       type: String,
       enum: ["USER", "ADMIN"],
@@ -34,9 +38,16 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Compare password
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
+
+// Sign access token
+userSchema.methods.signAccessToken = function () {};
+
+// Sign refresh token
+userSchema.methods.signRefreshToken = function () {};
 
 const User = mongoose.model("User", userSchema);
 export default User;

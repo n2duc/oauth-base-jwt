@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { login, logout, register } from "./auth.action";
+import { googleAuth, login, logout, register } from "./auth.action";
 import { User } from "@/type/data-models";
 
 interface AuthError {
@@ -83,7 +83,24 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.loading = false;
         state.error = null;
-      });
+      })
+      .addCase(googleAuth.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.status = "pending";
+      })
+      .addCase(googleAuth.fulfilled, (state, action: PayloadAction<{ data: User; access_token: string }>) => {
+        state.userInfo = action.payload.data;
+        state.accessToken = action.payload.access_token;
+        state.isAuthenticated = true;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(googleAuth.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as AuthError;
+        state.status = "rejected";
+      })
   }
 })
 

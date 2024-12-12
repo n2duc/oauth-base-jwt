@@ -8,9 +8,11 @@ import { registerSchema, RegisterValues } from "@/libs/validation";
 import { useForm } from "react-hook-form";
 import FieldInput from "@/components/FieldInput";
 import toast from "react-hot-toast";
+import GoogleButton from "@/components/GoogleButton";
+import { RootState } from "@/stores/store";
 
 const SignUpPage = () => {
-  const { loading, error, status, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { loading, error, status, isAuthenticated } = useAppSelector((state: RootState) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -68,6 +70,7 @@ const SignUpPage = () => {
         </button>
         <Link to="/signin">Sign In</Link>
       </form>
+      <GoogleButton />
     </div>
   )
 }

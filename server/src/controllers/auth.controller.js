@@ -4,8 +4,16 @@ import { generateToken, verifyToken } from "../utils/jwt.js";
 import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcryptjs";
 
-const ACCESS_TOKEN_EXPIRE = "10m";
-const REFRESH_TOKEN_EXPIRE = "7d";
+const JWTSecure = {
+  ACCESS: {
+    SECRET: process.env.ACCESS_TOKEN_SECRET,
+    EXPIRE: "10m"
+  },
+  REFRESH: {
+    SECRET: process.env.REFRESH_TOKEN_SECRET,
+    EXPIRE: "7d"
+  }
+};
 
 const register = async (req, res, next) => {
   try {
@@ -47,8 +55,8 @@ const login = async (req, res, next) => {
     };
 
     // Generate access token and refresh token
-    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRE);
-    const refresh_token = generateToken(userData, process.env.REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRE);
+    const access_token = generateToken(userData, JWTSecure.ACCESS.SECRET, JWTSecure.ACCESS.EXPIRE);
+    const refresh_token = generateToken(userData, JWTSecure.REFRESH.SECRET, JWTSecure.REFRESH.EXPIRE);
 
     await User.findByIdAndUpdate(user._id, { token: refresh_token });
 
@@ -92,6 +100,70 @@ const logout = async (req, res, next) => {
   }
 };
 
+const googleAuth = async (req, res, next) => {
+  const { name, email, photoUrl } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const userData = {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        avatar: user?.avatar
+      };
+      const access_token = generateToken(userData, JWTSecure.ACCESS.SECRET, JWTSecure.ACCESS.EXPIRE);
+      const refresh_token = generateToken(userData, JWTSecure.REFRESH.SECRET, JWTSecure.REFRESH.EXPIRE);
+
+      user.token = refresh_token;
+      await user.save();
+
+      res.cookie("refresh_token", refresh_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      });
+
+      return res.status(StatusCodes.OK).json({
+        data: userData,
+        access_token,
+        message: "Login successful"
+      });
+    } else {
+      const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-4);
+      const hashedPassword = bcrypt.hashSync(generatePassword, 10);
+      const newUser = new User({
+        username: name.toLowerCase().split(" ").join("") + Math.random().toString(9).slice(-4),
+        email,
+        password: hashedPassword,
+        avatar: photoUrl
+      });
+
+      const userData = {
+        _id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+        avatar: newUser?.avatar
+      };
+      const access_token = generateToken(userData, JWTSecure.ACCESS.SECRET, JWTSecure.ACCESS.EXPIRE);
+      const refresh_token = generateToken(userData, JWTSecure.REFRESH.SECRET, JWTSecure.REFRESH.EXPIRE);
+
+      newUser.token = refresh_token;
+      await newUser.save();
+
+      return res.status(StatusCodes.OK).json({
+        data: userData,
+        access_token,
+        message: "Login successful"
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 const refreshToken = async (req, res, next) => {
   try {
     const cookie = req.cookies;
@@ -106,7 +178,7 @@ const refreshToken = async (req, res, next) => {
       return next(CreateError("Access denied", StatusCodes.FORBIDDEN));
     }
 
-    const decoded = await verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = await verifyToken(refreshToken, JWTSecure.REFRESH.SECRET);
     if (foundUser.username !== decoded.username) {
       return next(CreateError("Access denied", StatusCodes.FORBIDDEN));
     }
@@ -118,7 +190,7 @@ const refreshToken = async (req, res, next) => {
       role: decoded.role
     };
 
-    const access_token = generateToken(userData, process.env.ACCESS_TOKEN_SECRET, REFRESH_TOKEN_EXPIRE);
+    const access_token = generateToken(userData, JWTSecure.ACCESS.SECRET, JWTSecure.ACCESS.EXPIRE);
 
     return res.status(StatusCodes.OK).json({ access_token });
   } catch (error) {
@@ -130,5 +202,6 @@ export default {
   register,
   login,
   logout,
+  googleAuth,
   refreshToken
 };

@@ -67,11 +67,37 @@ export const register = createAsyncThunk(
   }
 );
 
+interface IGoogleAuthBody {
+  name: string;
+  email: string;
+  photoUrl: string;
+}
+
+export const googleAuth = createAsyncThunk(
+  "auth/google",
+  async (
+    { name, email, photoUrl }: IGoogleAuthBody,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axiosPublic.post("/auth/google", { name, email, photoUrl });
+      return response.data;
+    } catch (err) {
+      const error: AxiosError<ValidationErrors> =
+        err as AxiosError<ValidationErrors>;
+      if (!error.response) {
+        throw err;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+)
+
 export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      await axiosPublic.get("/auth/logout");
+      await axiosPublic.post("/auth/logout");
       return;
     } catch (err) {
       const error: AxiosError<ValidationErrors> =
