@@ -6,17 +6,23 @@
     "node": "20.x"
   },
   "scripts": {
+    "install:all": "concurrently \"npm install --prefix server\" \"bun install --prefix client\"",
     "install:server": "cd server && npm install",
     "install:client": "cd client && bun install",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && bun dev",
-    "start": "cd server && npm start"
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\""
   },
-  "keywords": ["n2duc"],
+  "keywords": [
+    "n2duc"
+  ],
   "author": "@n2duc",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/n2duc/oauth-base-jwt"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }

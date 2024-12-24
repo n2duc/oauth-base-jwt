@@ -1,0 +1,4 @@
+seeder/
+node_modules/
+
+docker-compose.yaml
