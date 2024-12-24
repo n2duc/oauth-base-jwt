@@ -3,12 +3,18 @@ import Seo from "@/components/Seo";
 import UploadAvatar from "@/components/UploadAvatar";
 import { useAppSelector } from "@/hooks/reduxHook";
 import { useGetProfileQuery } from "@/services/rootApi";
+import { RootState } from "@/stores/store";
+import { useEffect } from "react";
 
 const UserProfilePage = () => {
-  const { data, isLoading, error, isSuccess } = useGetProfileQuery();
-  const { isShow } = useAppSelector((state) => state.dialog);
-  const { userInfo } = useAppSelector((state) => state.auth);
+  const { data, isLoading, error, isSuccess, refetch } = useGetProfileQuery();
+  const { isShow } = useAppSelector((state: RootState) => state.dialog);
+  const { userInfo } = useAppSelector((state: RootState) => state.auth);
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+  
   if (isLoading) {
     return <p>Loading...</p>;
   }

@@ -93,6 +93,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const rootApi = createApi({
   reducerPath: "rootApi",
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['Profile'],
   // endpoints: builder => ({}), // Add this here if you don't have any endpoints yet
   endpoints: (builder) => ({
     getProfile: builder.query<Profile, void>({
@@ -100,6 +101,7 @@ export const rootApi = createApi({
         url: "/user/profile",
         method: "GET",
       }),
+      providesTags: ['Profile'],
     }),
     updateAvatar: builder.mutation<{ success: boolean; data: User }, FormData>({
       query: (formData) => ({
@@ -110,6 +112,7 @@ export const rootApi = createApi({
           "Content-Type": undefined,
         }
       }),
+      invalidatesTags: ['Profile'],
     }),
     getAllUsers: builder.query<DashboardUser, void>({
       query: () => ({
