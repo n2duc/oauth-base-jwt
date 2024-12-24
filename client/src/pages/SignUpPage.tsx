@@ -7,7 +7,6 @@ import { resetStatus } from "../stores/auth/auth.slice";
 import { registerSchema, RegisterValues } from "@/libs/validation";
 import { useForm } from "react-hook-form";
 import FieldInput from "@/components/FieldInput";
-import toast from "react-hot-toast";
 import GoogleButton from "@/components/GoogleButton";
 import { RootState } from "@/stores/store";
 
@@ -27,10 +26,6 @@ const SignUpPage = () => {
 
   const handleRegister = (data: RegisterValues) => {
     dispatch(signUp(data));
-    if (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
   }
 
   useEffect(() => {

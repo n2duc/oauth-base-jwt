@@ -6,12 +6,11 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import FieldInput from "@/components/FieldInput";
-import toast from "react-hot-toast";
 import GoogleButton from "@/components/GoogleButton";
 import { RootState } from "@/stores/store";
 
 const SignInPage = () => {
-  const { loading, isAuthenticated, error } = useAppSelector((state: RootState) => state.auth);
+  const { loading, isAuthenticated } = useAppSelector((state: RootState) => state.auth);
   const dispatch = useAppDispatch();
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginValues>({
@@ -32,9 +31,6 @@ const SignInPage = () => {
 
   const handleLogin = (data: LoginValues) => {
     dispatch(login(data));
-    if (error) {
-      toast.error(error.message);
-    }
   };
 
   

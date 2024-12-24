@@ -18,3 +18,5 @@ export const verifyToken = (token, secret) => {
     });
   });
 };
+
+export const sendToken = () => {};

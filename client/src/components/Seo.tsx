@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet-async';
-
 interface ISeoProps {
   title: string;
   description: string;
@@ -7,10 +5,11 @@ interface ISeoProps {
 
 const Seo = ({ title, description }: ISeoProps) => {
   return (
-    <Helmet>
+    <>
       <title>{title}</title>
+      <meta name="author" content="n2duc" />
       <meta name="description" content={description} />
-    </Helmet>
+    </>
   )
 };
 

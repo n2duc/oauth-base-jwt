@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "http://localhost:8080/public/images/1733220137693-bongoaigiao2.jpg"
+      default: "http://localhost:8080/public/images/1733927106015-bongoaigiao1.jpg"
     },
     password: {
       type: String,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["USER", "ADMIN"],
+      enum: ["USER", "MANAGER", "ADMIN"],
       default: "USER"
     },
     token: {

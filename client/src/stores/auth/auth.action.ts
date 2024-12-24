@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import { rootApi } from "@/services/rootApi";
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
@@ -19,21 +21,24 @@ export const login = createAsyncThunk(
   "auth/login",
   async (
     { username, password }: { username: string; password: string },
-    { rejectWithValue }
+    { rejectWithValue, dispatch }
   ) => {
     try {
       const response = await axiosPublic.post("/auth/login", {
         username,
         password,
       });
-      const { data, access_token } = response.data;
-      return { data, access_token };
+      const { data, access_token, message } = response.data;
+      toast.success(message);
+      dispatch(rootApi.util.invalidateTags(['Profile']));
+      return { data, access_token, message };
     } catch (err) {
       const error: AxiosError<ValidationErrors> =
         err as AxiosError<ValidationErrors>;
       if (!error.response) {
         throw err;
       }
+      toast.error(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   }
@@ -55,13 +60,14 @@ export const register = createAsyncThunk(
         password,
         username,
       });
-      return response.data;
+      toast.success(response.data.message)
     } catch (err) {
       const error: AxiosError<ValidationErrors> =
         err as AxiosError<ValidationErrors>;
       if (!error.response) {
         throw err;
       }
+      toast.error(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   }
